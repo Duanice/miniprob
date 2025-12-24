@@ -1,0 +1,9 @@
+x := 5;
+y := 3;
+z := x + y;
+if z < 10 then
+  observe z;
+else
+  z := 100;
+
+

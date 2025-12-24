@@ -24,8 +24,13 @@
 
 %%
 
+stmts:
+  | stmt { $1 }
+  | stmt SEMI { $1 }
+  | stmt SEMI stmts { Seq ($1, $3) }
+
 program:
-  | stmt EOF { $1 }
+  | stmts EOF { $1 }
 
 stmt:
   | SKIP
@@ -34,8 +39,8 @@ stmt:
   | IDENT ASSIGN expr SEMI
       { Assign ($1, $3) }
 
-  | stmt SEMI stmt
-      { Seq ($1, $3) }
+  | stmt stmt
+      { Seq ($1, $2) }
 
   | IF expr THEN stmt ELSE stmt
       { If ($2, $4, $6) }
@@ -45,6 +50,7 @@ stmt:
 
   | OBSERVE expr SEMI
       { Observe $2 }
+
 
 expr:
   | INT

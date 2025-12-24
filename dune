@@ -1,6 +1,6 @@
 (executable
  (name main)
- (modules ast lexer parser main))
+ (modules ast lexer parser interpreter main))
 
 (ocamllex
  (modules lexer))

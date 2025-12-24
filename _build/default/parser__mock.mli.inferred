@@ -21,6 +21,7 @@ type token =
   | BOOL of bool
   | ASSIGN
 val menhir_begin_marker : int
+val xv_stmts : Ast.stmt
 val xv_stmt : Ast.stmt
 val xv_program : Ast.stmt
 val xv_expr : Ast.expr
