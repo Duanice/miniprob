@@ -34,6 +34,10 @@ let rec eval_expr (env : env) : expr -> value = function
       (match eval_expr env e1, eval_expr env e2 with
        | IntVal v1, IntVal v2 -> IntVal (v1 - v2)
        | _ -> failwith "Type error: Sub expects integers")
+  | Mul (e1, e2) ->                                      (* 乘法运算 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | IntVal v1, IntVal v2 -> IntVal (v1 * v2)
+       | _ -> failwith "Type error: Mul expects integers")
   | Lt (e1, e2) ->                                       (* 小于比较 *)
       let v1 = eval_expr env e1 in
       let v2 = eval_expr env e2 in
@@ -41,12 +45,82 @@ let rec eval_expr (env : env) : expr -> value = function
         | (IntVal i1, IntVal i2) -> i1 < i2
         | (BoolVal b1, BoolVal b2) -> b1 < b2
         | _ -> failwith "Type error in comparison")
+  | Gt (e1, e2) ->                                       (* 大于比较 *)
+      let v1 = eval_expr env e1 in
+      let v2 = eval_expr env e2 in
+      BoolVal (match (v1, v2) with
+        | (IntVal i1, IntVal i2) -> i1 > i2
+        | (BoolVal b1, BoolVal b2) -> b1 > b2
+        | _ -> failwith "Type error in comparison")
   | Eq (e1, e2) ->                                       (* 等于比较 *)
       let v1 = eval_expr env e1 in
       let v2 = eval_expr env e2 in
       BoolVal (v1 = v2)
   | Flip p ->                                            (* 概率翻转 *)
       BoolVal (Random.float 1.0 < p)
+
+  | Neg e ->                                             (* 一元负号 *)
+      (match eval_expr env e with
+       | IntVal i -> IntVal (-i)
+       | _ -> failwith "Type error: Neg expects integer")
+
+  (* 布尔运算 *)
+  | And (e1, e2) ->                                      (* 逻辑与 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | BoolVal b1, BoolVal b2 -> BoolVal (b1 && b2)
+       | _ -> failwith "Type error: And expects booleans")
+
+  | Or (e1, e2) ->                                       (* 逻辑或 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | BoolVal b1, BoolVal b2 -> BoolVal (b1 || b2)
+       | _ -> failwith "Type error: Or expects booleans")
+
+  | Not e ->                                             (* 逻辑非 *)
+      (match eval_expr env e with
+       | BoolVal b -> BoolVal (not b)
+       | _ -> failwith "Type error: Not expects boolean")
+
+  | Xor (e1, e2) ->                                      (* 逻辑异或 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | BoolVal b1, BoolVal b2 -> BoolVal ((b1 || b2) && not (b1 && b2))
+       | _ -> failwith "Type error: Xor expects booleans")
+
+  | Abs e ->                                             (* 绝对值 *)
+      (match eval_expr env e with
+       | IntVal i -> IntVal (abs i)
+       | _ -> failwith "Type error: Abs expects integer")
+
+  (* 布尔运算 *)
+  | And (e1, e2) ->                                      (* 逻辑与 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | BoolVal b1, BoolVal b2 -> BoolVal (b1 && b2)
+       | _ -> failwith "Type error: And expects booleans")
+  | Or (e1, e2) ->                                       (* 逻辑或 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | BoolVal b1, BoolVal b2 -> BoolVal (b1 || b2)
+       | _ -> failwith "Type error: Or expects booleans")
+  | Not e ->                                             (* 逻辑非 *)
+      (match eval_expr env e with
+       | BoolVal b -> BoolVal (not b)
+       | _ -> failwith "Type error: Not expects boolean")
+  | Xor (e1, e2) ->                                      (* 逻辑异或 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | BoolVal b1, BoolVal b2 -> BoolVal ((b1 || b2) && not (b1 && b2))
+       | _ -> failwith "Type error: Xor expects booleans")
+
+  (* 数学函数 *)
+  | Max (e1, e2) ->                                      (* 最大值 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | IntVal i1, IntVal i2 -> IntVal (max i1 i2)
+       | _ -> failwith "Type error: Max expects integers")
+  | Min (e1, e2) ->                                      (* 最小值 *)
+      (match eval_expr env e1, eval_expr env e2 with
+       | IntVal i1, IntVal i2 -> IntVal (min i1 i2)
+       | _ -> failwith "Type error: Min expects integers")
+  | Abs e ->                                             (* 绝对值 *)
+      (match eval_expr env e with
+       | IntVal i -> IntVal (abs i)
+       | _ -> failwith "Type error: Abs expects integer")
 
 (* 语句执行函数 *)
 let rec eval_stmt (env : env) : stmt -> env = function
@@ -82,6 +156,23 @@ let rec eval_stmt (env : env) : stmt -> env = function
        | BoolVal b -> Printf.printf "%b" b);
       Printf.printf "\n";
       env  (* 观测不改变环境 *)
+
+  | Print expr ->                                        (* 打印语句 *)
+      let value = eval_expr env expr in
+      (match value with
+       | IntVal i -> Printf.printf "%d" i
+       | BoolVal b -> Printf.printf "%b" b);
+      Printf.printf "\n";
+      env  (* 打印不改变环境 *)
+
+  | PrintWith (prefix, expr) ->                         (* 带前缀的打印语句 *)
+      let value = eval_expr env expr in
+      Printf.printf "%s " prefix;  (* 前缀后加空格 *)
+      (match value with
+       | IntVal i -> Printf.printf "%d" i
+       | BoolVal b -> Printf.printf "%b" b);
+      Printf.printf "\n";
+      env  (* 打印不改变环境 *)
 
 (* 辅助函数：打印环境 *)
 let print_env (env : env) : unit =

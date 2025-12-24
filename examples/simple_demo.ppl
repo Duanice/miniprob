@@ -1,0 +1,28 @@
+x := 5;
+y := -3;
+z := 10;
+
+print(x);
+print(y);
+print(z);
+
+a := true && false;
+b := true || false;
+c := !false;
+d := true xor false;
+
+print(a);
+print(b);
+print(c);
+print(d);
+
+max_val := max(x, y);
+min_val := min(x, z);
+abs_val := abs(y);
+
+print(max_val);
+print(min_val);
+print(abs_val);
+
+result := (x > y) && (max(x, z) == z);
+print(result);

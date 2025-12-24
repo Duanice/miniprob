@@ -1,0 +1,12 @@
+x := 42;
+y := x * 2;
+
+printwith "x = " x;
+printwith " y = " y;
+printwith "x > 20: " (x > 20);
+printwith "y == 84: " (y == 84);
+
+if x > 40 then
+  printwith "Result: " x;
+else
+  printwith "Small value: " x;

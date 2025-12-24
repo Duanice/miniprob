@@ -1,6 +1,7 @@
 (executable
  (name main)
- (modules ast lexer parser interpreter main))
+ (modules ast lexer parser interpreter main)
+ (flags (:standard -w -11)))
 
 (ocamllex
  (modules lexer))

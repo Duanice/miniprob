@@ -1,87 +1,60 @@
 
-** Conflict (shift/reduce) in state 37.
-** Tokens involved: WHILE SKIP OBSERVE IF IDENT
+** Conflict (shift/reduce) in state 76.
+** Tokens involved: WHILE SKIP PRINT_WITH PRINT OBSERVE IF IDENT
 ** The following explanations concentrate on token WHILE.
 ** This state is reached from program after reading:
 
-WHILE expr DO stmt
+WHILE expr DO stmts
 
 ** The derivations that appear below have the following common factor:
 ** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
 
 program 
 stmts EOF 
-stmt 
 (?)
 
-** In state 37, looking ahead at WHILE, shifting is permitted
+** In state 76, looking ahead at WHILE, shifting is permitted
 ** because of the following sub-derivation:
 
-WHILE expr DO stmt 
-              stmt stmt 
-                   . WHILE expr DO stmt 
+stmt 
+WHILE expr DO stmts 
+              stmts stmt 
+                    . WHILE expr DO stmts 
 
-** In state 37, looking ahead at WHILE, reducing production
-** stmt -> WHILE expr DO stmt
+** In state 76, looking ahead at WHILE, reducing production
+** stmt -> WHILE expr DO stmts
 ** is permitted because of the following sub-derivation:
 
-stmt stmt // lookahead token appears because stmt can begin with WHILE
-WHILE expr DO stmt . 
+stmts stmt // lookahead token appears because stmt can begin with WHILE
+stmt // lookahead token is inherited
+WHILE expr DO stmts . 
 
-** Conflict (shift/reduce) in state 36.
-** Tokens involved: WHILE SKIP OBSERVE IF IDENT
+** Conflict (shift/reduce) in state 73.
+** Tokens involved: WHILE SKIP PRINT_WITH PRINT OBSERVE IF IDENT
 ** The following explanations concentrate on token WHILE.
 ** This state is reached from program after reading:
 
-stmt stmt
+IF expr THEN stmts ELSE stmts
 
 ** The derivations that appear below have the following common factor:
 ** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
 
 program 
 stmts EOF 
-stmt 
 (?)
 
-** In state 36, looking ahead at WHILE, reducing production
-** stmt -> stmt stmt
+** In state 73, looking ahead at WHILE, reducing production
+** stmt -> IF expr THEN stmts ELSE stmts
 ** is permitted because of the following sub-derivation:
 
-stmt stmt // lookahead token appears because stmt can begin with WHILE
-stmt stmt . 
+stmts stmt // lookahead token appears because stmt can begin with WHILE
+stmt // lookahead token is inherited
+IF expr THEN stmts ELSE stmts . 
 
-** In state 36, looking ahead at WHILE, shifting is permitted
+** In state 73, looking ahead at WHILE, shifting is permitted
 ** because of the following sub-derivation:
 
-stmt stmt 
-     stmt stmt 
-          . WHILE expr DO stmt 
-
-** Conflict (shift/reduce) in state 35.
-** Tokens involved: WHILE SKIP OBSERVE IF IDENT
-** The following explanations concentrate on token WHILE.
-** This state is reached from program after reading:
-
-IF expr THEN stmt ELSE stmt
-
-** The derivations that appear below have the following common factor:
-** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
-
-program 
-stmts EOF 
 stmt 
-(?)
-
-** In state 35, looking ahead at WHILE, reducing production
-** stmt -> IF expr THEN stmt ELSE stmt
-** is permitted because of the following sub-derivation:
-
-stmt stmt // lookahead token appears because stmt can begin with WHILE
-IF expr THEN stmt ELSE stmt . 
-
-** In state 35, looking ahead at WHILE, shifting is permitted
-** because of the following sub-derivation:
-
-IF expr THEN stmt ELSE stmt 
-                       stmt stmt 
-                            . WHILE expr DO stmt 
+IF expr THEN stmts ELSE stmts 
+                        stmts stmt 
+                              . WHILE expr DO stmts 

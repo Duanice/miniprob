@@ -5,10 +5,15 @@
 ## 语法特性
 
 - **数据类型**: 整数(int)、布尔值(bool)
-- **运算**: 加法(+)、减法(-)、比较(<, ==)
+- **算术运算**: 加法(+)、减法(-)、乘法(*)、一元负号(-expr)
+- **比较运算**: 小于(<)、大于(>)、等于(==)
+- **布尔运算**: 与(&&)、或(||)、非(!)、异或(xor)
+- **数学函数**: abs(expr)、max(expr, expr)、min(expr, expr)
 - **概率**: flip(p) - 以概率p返回true
 - **控制流**: if-then-else, while-do
-- **观测**: observe(expr) - 打印表达式的值
+- **输出**: print(expr) - 打印表达式的值
+- **观测**: observe(expr) - 打印观测值（用于调试）
+- **调试**: printwith prefix expr - 带自定义前缀的调试输出
 
 ## 使用方法
 
@@ -29,17 +34,23 @@ cat your_program.ppl | ./_build/default/main.exe --run
 
 ## 示例程序
 
-查看 `example.ppl`：
+### 基本功能演示
+```pascal
+x := 5;
+y := 3;
+print(x * y);           # 输出: 15 (乘法)
+print(abs(-x));         # 输出: 5 (绝对值)
+print(max(x, y));       # 输出: 5 (最大值)
+print(x > y);           # 输出: true (大于比较)
+print(true && false);   # 输出: false (逻辑与)
+print(!true);           # 输出: false (逻辑非)
+
+printwith "x = " x;       # 输出: x = 42
+printwith "result: " (x > y); # 输出: result: true
 ```
-x := 0;
-while x < 5 do
-  x := x + 1;
-  observe x;
-if flip(0.9) then
-  observe 100;
-else
-  observe 200;
-```
+
+### 完整程序示例
+查看 `examples/stdlib_demo.ppl`
 
 运行结果：
 ```
