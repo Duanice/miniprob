@@ -1,0 +1,27 @@
+type token =
+    WHILE
+  | THEN
+  | SKIP
+  | SEMI
+  | RPAREN
+  | PLUS
+  | OBSERVE
+  | MINUS
+  | LT
+  | LPAREN
+  | INT of int
+  | IF
+  | IDENT of string
+  | FLOAT of float
+  | FLIP
+  | EQ
+  | EOF
+  | ELSE
+  | DO
+  | BOOL of bool
+  | ASSIGN
+val menhir_begin_marker : int
+val xv_stmt : Ast.stmt
+val xv_program : Ast.stmt
+val xv_expr : Ast.expr
+val menhir_end_marker : int
