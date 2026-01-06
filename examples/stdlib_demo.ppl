@@ -1,0 +1,26 @@
+x := 10;
+y := -5;
+a := true;
+b := false;
+
+print(x);
+print(y);
+print(a);
+print(b);
+
+print(abs(y));
+print(max(x, abs(y)));
+print(min(x, abs(y)));
+
+print(a && b);
+print(a || b);
+print(!a);
+print(a xor b);
+
+result := max(x + y, abs(y) * 2);
+print(result);
+
+if (x > 0) && (abs(y) < 10) then
+  print(100);
+else
+  print(200);
