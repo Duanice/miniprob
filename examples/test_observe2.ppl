@@ -1,0 +1,3 @@
+x := 0;
+observe (x > 0);
+print(1);

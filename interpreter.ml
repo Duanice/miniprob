@@ -4,6 +4,8 @@
 
 open Ast
 
+exception Reject
+
 (* 值类型：解释器计算表达式的结果 *)
 type value =
   | IntVal of int    (* 整数值 *)
@@ -126,13 +128,10 @@ let rec eval_stmt (env : env) : stmt -> env = function
              env
        | _ -> failwith "Type error: While condition must be boolean")
   | Observe expr ->                                      (* 观测语句 *)
-      let value = eval_expr env expr in
-      Printf.printf "Observed: ";
-      (match value with
-       | IntVal i -> Printf.printf "%d" i
-       | BoolVal b -> Printf.printf "%b" b);
-      Printf.printf "\n";
-      env  (* 观测不改变环境 *)
+      (match eval_expr env expr with
+       | BoolVal true -> env
+       | BoolVal false -> raise Reject
+       | _ -> failwith "Type error: Observe expects boolean")
 
   | Print expr ->                                        (* 打印语句 *)
       let value = eval_expr env expr in
